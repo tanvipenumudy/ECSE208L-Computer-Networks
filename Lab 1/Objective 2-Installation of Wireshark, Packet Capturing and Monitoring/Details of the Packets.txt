@@ -1,0 +1,20 @@
+Packet Details:
+Since the packet details are structured according to layer-specific information, I can quickly expand a collapsed section related to the target of my search.  Pro-tip: this is where understanding networking and application behavior is really helpful.  Don't worry if you're not familiar, because this is also what helps you learn how the packets are placed onto the wire.  Let's dive into this one layer at a time.
+
+Ethernet Header (OSI Layer 2 - Datalink):
+With or without expanding the Ethernet header, we can see the source MAC address and destination MAC address.  This is handy when troubleshooting an outbound packet, because you can see where the packet was destined to reach.  Typically, this destination MAC belongs to the default gateway, but it depends on the network topology. 
+
+IP Header (Layer 3 - Network):
+In the IP header, we see the source and destination IP addresses.  When dealing with packets on WAN links, sometimes people utilize the DiffServ Code Point value (DSCP) as a Quality of Service mechanism to classify packets into prioritized buckets.  Higher-priority packet buckets get processed first.
+
+TCP Header (Layer 4 - Transport):
+Focusing on the highlighted line in blue, we quickly see the source port and destination port.  From those numbers, it's typically easy to recognize which is the sender and receiver.  When a host sends a packet to another host, the port chosen on the source is a randomized ephemeral port higher than port 1024.  The destination host in this case is a webserver, which makes sense since we're looking at an HTTP packet, and the destination port is 80 (the normal server port over which HTTP connections are established).
+
+In the exploded view, we see the Flags section which indicates certain information related to the nature of the connection.  For instance, the Push flag is set, which is an indicator that the packet should be processed up to Layer 7 because the source is sending data to the destination.  In this packet, that data is the URL in the GET request
+
+HTTP (Layer 7 - Application):
+Expanding the HTTP layer, we see the formation of the GET request.  Bonus points on my imaginary scoreboard if anyone can let me know in the comments whether the request is explicit or transparent.  In the GET request, I can see the HTTP protocol version used (1.1) and the path of the request.  The path in this packet is "/", meaning it was a request for the root web directory.
+
+The Host Header instructs the server to send the root web directory back for www.msn.com.  Can anyone guess why the Host Header is important?  Think about it for a second, and then you can check your answer.
+
+Below the Host Header, we can see other HTTP Request Headers the browser of the source host sent to the webserver.  The ones to discuss are User-Agent, DNT, Accept, Accept-Encoding, and Accept-Language.
